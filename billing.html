@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fruit Shop Billing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url("mixed-fruits.jpg") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 12px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+    }
+    h2 { text-align: center; }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .add-btn { background: #28a745; color: #fff; }
+    .final-btn { background: #007bff; color: #fff; }
+    .new-btn { background: #e83e8c; color: #fff; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 8px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">ANANDHA FRUITS & SNACKS</div>
+  <div class="container">
+    <h2>🍎 Fruit Shop Billing</h2>
+
+    <label for="fruit">Select Fruit:</label>
+    <select id="fruit"></select>
+
+    <label for="weight">Enter Weight (grams):</label>
+    <input type="number" id="weight" placeholder="grams">
+
+    <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Fruit</th>
+          <th>Weight (g)</th>
+          <th>Price (₹)</th>
+        </tr>
+      </thead>
+      <tbody id="cartTable"></tbody>
+    </table>
+
+    <h3 id="finalPrice"></h3>
+    <button class="final-btn" onclick="getFinal()">Get Final Price</button>
+    <button class="new-btn" onclick="newCustomer()">New Customer</button>
+  </div>
+
+  <script>
+    let cart = [];
+    let prices = JSON.parse(localStorage.getItem("fruitPrices")) || {};
+
+    // Load fruits into dropdown
+    function loadFruits() {
+      let fruitSelect = document.getElementById("fruit");
+      fruitSelect.innerHTML = "";
+      for (let fruit in prices) {
+        let option = document.createElement("option");
+        option.value = fruit;
+        option.dataset.price = prices[fruit];
+        option.text = `${fruit} (₹${prices[fruit]}/kg)`;
+        fruitSelect.appendChild(option);
+      }
+    }
+
+    function addToCart() {
+      let fruitSelect = document.getElementById("fruit");
+      let fruit = fruitSelect.value;
+      let pricePerKg = fruitSelect.options[fruitSelect.selectedIndex].dataset.price;
+      let grams = parseFloat(document.getElementById("weight").value);
+
+      if (!grams || grams <= 0) {
+        alert("Enter valid weight!");
+        return;
+      }
+
+      let total = (grams / 1000) * pricePerKg;
+      cart.push({ fruit, grams, total });
+
+      updateCart();
+      document.getElementById("weight").value = "";
+    }
+
+    function updateCart() {
+      let tbody = document.getElementById("cartTable");
+      tbody.innerHTML = "";
+      cart.forEach(item => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${item.fruit}</td>
+            <td>${item.grams}</td>
+            <td>₹${item.total.toFixed(2)}</td>
+          </tr>`;
+      });
+    }
+
+    function getFinal() {
+      let total = cart.reduce((sum, item) => sum + item.total, 0);
+      document.getElementById("finalPrice").innerText = "Final Price: ₹" + total.toFixed(2);
+    }
+
+    function newCustomer() {
+      cart = [];
+      updateCart();
+      document.getElementById("finalPrice").innerText = "";
+      alert("Ready for next customer!");
+    }
+
+    loadFruits();
+  </script>
+</body>
+</html>

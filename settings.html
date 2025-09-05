@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Set Fruit Prices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url("mixed-fruits.jpg") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 12px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #28a745;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">ANANDHA FRUITS & SNACKS</div>
+  <div class="container">
+    <h2>🍇 Set Daily Fruit Prices (₹/kg)</h2>
+
+    <label>Apple: <input type="number" id="apple"></label>
+    <label>Mango: <input type="number" id="mango"></label>
+    <label>Banana: <input type="number" id="banana"></label>
+    <label>Orange: <input type="number" id="orange"></label>
+    <label>Green Grapes: <input type="number" id="greenGrapes"></label>
+    <label>Black Grapes: <input type="number" id="blackGrapes"></label>
+    <label>Pineapple: <input type="number" id="pineapple"></label>
+    <label>Papaya: <input type="number" id="papaya"></label>
+
+    <button onclick="savePrices()">Save Prices</button>
+  </div>
+
+  <script>
+    function savePrices() {
+      let prices = {
+        Apple: document.getElementById("apple").value || 0,
+        Mango: document.getElementById("mango").value || 0,
+        Banana: document.getElementById("banana").value || 0,
+        Orange: document.getElementById("orange").value || 0,
+        "Green Grapes": document.getElementById("greenGrapes").value || 0,
+        "Black Grapes": document.getElementById("blackGrapes").value || 0,
+        Pineapple: document.getElementById("pineapple").value || 0,
+        Papaya: document.getElementById("papaya").value || 0
+      };
+      localStorage.setItem("fruitPrices", JSON.stringify(prices));
+      alert("✅ Prices saved successfully for today!");
+    }
+  </script>
+</body>
+</html>
